@@ -1,12 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import requests
 from fastapi.middleware.cors import CORSMiddleware
+from groq import Groq
 import os
 
 app = FastAPI()
 
-# Enable CORS so your Next.js app can talk to Python
+# 1. SECURITY & CONNECTION: Allow your Next.js frontend to talk to this server
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -14,33 +14,62 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configuration (Use your Hugging Face Token here)
-API_URL = "https://api-inference.huggingface.co/models/google/med-gamma-2b"
-HEADERS = {"Authorization": "Bearer YOUR_HUGGING_FACE_TOKEN_HERE"}
+# 2. CLIENT SETUP: Use your 'gsk_' key here
+# Replace the string below with your actual Groq API Key
+import os
+GROQ_API_KEY = os.getenv("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") # This is the safe way to handle API keys
+if not GROQ_API_KEY:
+    raise ValueError("GROQ_API_KEY environment variable not set")
+client = Groq(api_key=GROQ_API_KEY)
 
-class TriageInput(BaseModel):
+# 3. DATA STRUCTURE: Matches your frontend 'formData'
+class TriageRequest(BaseModel):
     symptoms: str
     specialty: str
+    temp: str = ""
+    bp: str = ""
 
-@app.post("/analyze")
-async def analyze_clinical(data: TriageInput):
-    # Professional Clinical Prompt for Med-Gemma
-    prompt = f"<|system|>You are a clinical assistant. Use Med-Gemma logic.<|user|>Patient Specialty: {data.specialty}. Symptoms: {data.symptoms}. Provide 1 critical clinical alert for the nurse.<|assistant|>"
-    
-    payload = {
-        "inputs": prompt,
-        "parameters": {"max_new_tokens": 150, "temperature": 0.2}
-    }
-    
-    response = requests.post(API_URL, headers=HEADERS, json=payload)
-    
-    if response.status_code == 200:
-        result = response.json()
-        # Clean up the output to only show the assistant's response
-        full_text = result[0].get('generated_text', "")
-        suggestion = full_text.split("<|assistant|>")[-1].strip()
+@app.get("/")
+def home():
+    return {"status": "MediConnect Backend is Online and Ready"}
+
+@app.post("/api/analyze")
+async def analyze_symptoms(data: TriageRequest):
+    if not data.symptoms or len(data.symptoms) < 5:
+        return {"suggestion": "Please enter more detailed symptoms for AI analysis."}
+
+    try:
+        # 4. CLINICAL PROMPT: Instructing the AI to act like a Nigerian Medical Specialist
+        # We use Llama 3.3 70b because it is extremely smart but still responds in < 1 second
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a Clinical AI Assistant for Nigerian healthcare professionals. "
+                        "Task: Provide a rapid triage assessment. "
+                        "Format: Use 3 clear bullet points. "
+                        "Context: Consider local Nigerian health realities (e.g., malaria, typhoid, maternal health). "
+                        "Tone: Professional, urgent, and concise to save time."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": f"Ward: {data.specialty}. Vitals: BP {data.bp}, Temp {data.temp}. Symptoms: {data.symptoms}"
+                }
+            ],
+            temperature=0.2, # Low temperature ensures medical accuracy over creativity
+            max_tokens=150   # Keeps responses short to save data and time
+        )
+        
+        # 5. RESPONSE: Send the AI's advice back to the frontend
+        suggestion = response.choices[0].message.content
         return {"suggestion": suggestion}
-    else:
-        return {"suggestion": "Clinical analysis currently unavailable. Check vitals manually."}
 
-# RUN COMMAND: uvicorn main:app --reload
+    except Exception as e:
+        # Log the actual error to your terminal so you can see it
+        print(f"Detailed Error: {e}")
+        return {"suggestion": "AI connection blip. Please follow standard hospital triage protocols."}
+
+# To run: python -m uvicorn main:app --reload
