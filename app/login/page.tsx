@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from 'react';
 import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
-import { Lock, Mail, LogIn } from 'lucide-react';
+import { LogIn } from 'lucide-react';
 
+// This prevents Vercel from trying to pre-render this page as a static file
 export const dynamic = "force-dynamic";
 
 export default function Login() {
@@ -10,22 +11,32 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      alert(error.message);
-    } else {
-      window.location.href = "/dashboard";
+    try {
+      // FIX: We only initialize Supabase here, inside the function.
+      // This ensures Vercel doesn't crash during the build phase.
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
+
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        alert(error.message);
+      } else {
+        // Use router or window for navigation
+        window.location.href = "/dashboard";
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("An unexpected error occurred. Please check your connection.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -36,16 +47,24 @@ export default function Login() {
         
         <form onSubmit={handleLogin} className="space-y-4 text-left">
           <input 
-            type="email" placeholder="Email Address"
-            className="w-full p-4 bg-slate-50 rounded-2xl ring-1 ring-slate-100 outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+            type="email" 
+            placeholder="Email Address"
+            required
+            className="w-full p-4 bg-slate-50 rounded-2xl ring-1 ring-slate-100 outline-none focus:ring-2 focus:ring-blue-500 font-medium text-slate-900"
             onChange={(e) => setEmail(e.target.value)}
           />
           <input 
-            type="password" placeholder="Password"
-            className="w-full p-4 bg-slate-50 rounded-2xl ring-1 ring-slate-100 outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+            type="password" 
+            placeholder="Password"
+            required
+            className="w-full p-4 bg-slate-50 rounded-2xl ring-1 ring-slate-100 outline-none focus:ring-2 focus:ring-blue-500 font-medium text-slate-900"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all">
+          <button 
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all disabled:opacity-50"
+          >
             {loading ? "Signing in..." : <><LogIn size={20}/> Login to EMR</>}
           </button>
         </form>
