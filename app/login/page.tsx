@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { Lock, Mail, LogIn } from 'lucide-react';
 
+export const dynamic = "force-dynamic";
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

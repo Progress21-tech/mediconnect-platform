@@ -108,6 +108,10 @@ export default function AITriageDashboard() {
           </div>
 
           <div className="flex items-center gap-6">
+            <Link href="/triage" className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 rounded-xl font-black text-xs uppercase transition-all">
+              <Brain size={16} />
+              AI Triage
+            </Link>
             <div className="flex items-center gap-3 border-l pl-6 border-slate-100">
               <div className="text-right">
                 <p className="text-sm font-black text-slate-800 uppercase ">Nurse Chima</p>
