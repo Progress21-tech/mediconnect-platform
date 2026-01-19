@@ -1,5 +1,12 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "mediconnect-backend/main.py" }
+    {
+      "source": "/api/analyze",
+      "destination": "mediconnect-backend/main.py"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "mediconnect-backend/main.py"
+    }
   ]
 }
