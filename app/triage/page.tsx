@@ -1,12 +1,15 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation'; // Integrated: Navigation hook
 import { 
   ArrowLeft, Brain, Zap, Thermometer, 
-  HeartPulse, User, PlusCircle, Loader2 
+  HeartPulse, User, PlusCircle, Loader2, CheckCircle2
 } from 'lucide-react';
 
 export default function AITriage() {
+  const router = useRouter(); // Integrated: Router initialization
+
   // 1. STATE MANAGEMENT
   const [specialty, setSpecialty] = useState('maternal'); 
   const [isSaving, setIsSaving] = useState(false);
@@ -19,17 +22,27 @@ export default function AITriage() {
     symptoms: ''
   });
 
-  // 2. GROK AI INTEGRATION
+  // 2. GROK/GROQ AI INTEGRATION
   const triggerGrokAnalysis = async () => {
     if (formData.symptoms.length < 10) return;
     
     setIsAnalyzing(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/analyze', {
+   const response = await fetch('http://127.0.0.1:8000/api/analyze', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ 
+    name: formData.name,      // Added this line
+    symptoms: formData.symptoms,
+    specialty: specialty,
+    temp: formData.temp,
+    bp: formData.bp
+  }),
+});   const response = await fetch('http://127.0.0.1:8000/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          symptoms: formData.symptoms, // Fixed: accessing from formData
+          symptoms: formData.symptoms,
           specialty: specialty,
           temp: formData.temp,
           bp: formData.bp
@@ -63,14 +76,17 @@ export default function AITriage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name) return alert("Please enter patient name");
+    
     setIsSaving(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulating Save
-      alert(`Success: ${formData.name} added to the ${specialty} queue.`);
-      setFormData({ name: '', bp: '', temp: '', symptoms: '' });
-      setAiSuggestion("");
+      // Simulating a database save (You can replace this with your actual DB call)
+      await new Promise(resolve => setTimeout(resolve, 1200)); 
+      
+      // Integrated: Auto-Redirect after success
+      router.push('/dashboard'); 
+      
     } catch (err) {
-      alert("Error saving data.");
+      alert("Error saving data. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -149,12 +165,12 @@ export default function AITriage() {
                   <button 
                     type="button" 
                     onClick={() => setSpecialty('maternal')}
-                    className={`flex-1 py-5 rounded-2xl font-black uppercase italic text-xs transition-all ${specialty === 'maternal' ? 'bg-blue-600 shadow-lg' : 'bg-white/5 text-slate-500'}`}
+                    className={`flex-1 py-5 rounded-2xl font-black uppercase italic text-xs transition-all ${specialty === 'maternal' ? 'bg-blue-600 shadow-lg shadow-blue-500/40 scale-105' : 'bg-white/5 text-slate-500'}`}
                   > Maternal </button>
                   <button 
                     type="button" 
                     onClick={() => setSpecialty('chronic')}
-                    className={`flex-1 py-5 rounded-2xl font-black uppercase italic text-xs transition-all ${specialty === 'chronic' ? 'bg-orange-600 shadow-lg' : 'bg-white/5 text-slate-500'}`}
+                    className={`flex-1 py-5 rounded-2xl font-black uppercase italic text-xs transition-all ${specialty === 'chronic' ? 'bg-orange-600 shadow-lg shadow-orange-500/40 scale-105' : 'bg-white/5 text-slate-500'}`}
                   > Chronic </button>
                 </div>
              </div>
@@ -163,7 +179,7 @@ export default function AITriage() {
 
           {/* DYNAMIC AI ANALYSIS BOX */}
           <div className={`p-10 rounded-[3rem] border-2 transition-all duration-500 min-h-[220px] flex flex-col justify-center 
-            ${isAnalyzing ? 'bg-blue-50 border-blue-100' : aiSuggestion ? 'bg-slate-900 text-white border-transparent shadow-2xl' : 'bg-slate-50 border-transparent'}`}>
+            ${isAnalyzing ? 'bg-blue-50 border-blue-100 scale-[0.98]' : aiSuggestion ? 'bg-slate-900 text-white border-transparent shadow-2xl' : 'bg-slate-50 border-transparent'}`}>
             
             <div className="flex items-center gap-2 mb-4">
               {isAnalyzing ? (
@@ -176,20 +192,27 @@ export default function AITriage() {
               </span>
             </div>
 
-            <p className={`text-xl font-bold italic tracking-tight leading-tight 
+            <div className={`text-xl font-bold italic tracking-tight leading-tight 
               ${isAnalyzing ? 'text-blue-700' : aiSuggestion ? 'text-white' : 'text-slate-300'}`}>
-              {isAnalyzing ? "Processing symptoms against clinical protocols..." : aiSuggestion || "Enter symptoms for real-time analysis."}
-            </p>
+              {isAnalyzing ? "Processing symptoms against clinical protocols..." : (
+                <div className="whitespace-pre-line">
+                   {aiSuggestion || "Enter symptoms for real-time analysis."}
+                </div>
+              )}
+            </div>
           </div>
 
           <button 
             type="submit"
             disabled={isSaving}
             className={`w-full py-8 rounded-[2.5rem] font-black uppercase italic tracking-widest transition-all shadow-2xl flex items-center justify-center gap-4
-              ${isSaving ? 'bg-slate-200 text-slate-400' : 'bg-blue-600 text-white hover:bg-slate-900 active:scale-95'}`}
+              ${isSaving ? 'bg-green-500 text-white animate-pulse' : 'bg-blue-600 text-white hover:bg-slate-900 active:scale-95'}`}
           >
-            {isSaving ? "Finalizing..." : "Send to Medical Queue"}
-            {!isSaving && <PlusCircle size={24} />}
+            {isSaving ? (
+              <>Saving Patient... <Loader2 className="animate-spin" /></>
+            ) : (
+              <>Send to Medical Queue <PlusCircle size={24} /></>
+            )}
           </button>
         </div>
 
