@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { createBrowserClient } from '@supabase/ssr';
+import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { Lock, Mail, LogIn } from 'lucide-react';
 
 export const dynamic = "force-dynamic";
