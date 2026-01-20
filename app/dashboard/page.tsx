@@ -81,15 +81,15 @@ export default function AITriageDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-white font-sans overflow-hidden">
+    <div className="flex min-h-screen bg-white font-sans">
       
       {/* 1. MAIN WORKSPACE */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row">
         
         {/* TOP BAR */}
-        <header className="h-20 bg-white border-b flex items-center justify-between px-8 z-10 shrink-0">
+        <header className="h-20 bg-white border-b flex items-center justify-between px-4 md:px-8 z-10 shrink-0 flex-wrap gap-4">
           <div className="relative w-96">
-            <Search className="absolute left-4 top-3 text-slate-300" size={18} />
+            <Search className="w-full md:w-96 absolute left-4 top-3 text-slate-300" size={18} />
             <input type="text" placeholder="Search Hospital Database..." className="w-full pl-12 pr-4 py-3 bg-slate-100/50 rounded-xl border-none text-sm font-bold outline-none" />
           </div>
 
@@ -112,7 +112,7 @@ export default function AITriageDashboard() {
               <Brain size={16} />
               AI Triage
             </Link>
-            <div className="flex items-center gap-3 border-l pl-6 border-slate-100">
+            <div className="flex items-center gap-3 border-slate-100 border-t pt-4 md: border-t-0 md:border-none md:pt-0 md:border-1 md:pl-6">
               <div className="text-right">
                 <p className="text-sm font-black text-slate-800 uppercase ">Nurse Chima</p>
                 <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest">Triage Unit</p>
@@ -127,11 +127,11 @@ export default function AITriageDashboard() {
         </header>
 
         {/* MAIN CONTENT AREA */}
-        <main className="flex-1 overflow-hidden p-8 bg-slate-50/50">
+        <main className="w-full lg:flex-1 overflow-hidden p-8 bg-slate-50/50">
           <div className="flex gap-8 h-full">
             
             {/* LEFT: FORM & QUEUE */}
-            <div className="w-96 flex flex-col gap-6 overflow-y-auto pr-2">
+            <div className="w-full lg:w-96 flex flex-col gap-6 overflow-y-auto pr-2">
               
               {/* TRIAGE FORM CARD */}
               <div className="bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 space-y-4 shrink-0">
@@ -205,7 +205,7 @@ export default function AITriageDashboard() {
                     </div>
 
                     {/* VITALS & PLAN GRID */}
-                    <div className="grid grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="bg-slate-50 p-8 rounded-[3rem] border border-slate-100">
                          <h4 className="text-[10px] font-black text-slate-400 uppercase mb-6 tracking-widest flex items-center gap-2">
                            <HeartPulse size={16} className="text-red-500" /> Triage History
