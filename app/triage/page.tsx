@@ -97,7 +97,7 @@ export default function AITriage() {
           <div className="bg-blue-600 p-2 rounded-xl text-white shadow-lg">
             <Brain size={20} />
           </div>
-          <span className="text-xl font-black uppercase tracking-tighter">AI Triage</span>
+          <span className="text-xl font-black uppercase tracking-tighter">Mediconnect AI Triage</span>
         </div>
       </div>
 
