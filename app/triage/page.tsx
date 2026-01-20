@@ -89,7 +89,7 @@ export default function AITriage() {
     <div className="min-h-screen bg-slate-50 p-6 md:p-12">
       
       {/* HEADER */}
-      <div className="max-w-5xl mx-auto flex justify-between items-center mb-12">
+      <div className="max-w-5xl mx-auto flex justify-between items-center mb-12 grid grid-cols-1 lg :grid-cols-3 gap-6">
         <Link href="/dashboard" className="flex items-center gap-2 text-slate-400 font-bold text-xs uppercase hover:text-blue-600 transition-colors">
           <ArrowLeft size={16} /> Dashboard
         </Link>
@@ -120,7 +120,7 @@ export default function AITriage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div className="relative">
                 <HeartPulse className="absolute left-5 top-5 text-slate-300" size={20} />
                 <input 
