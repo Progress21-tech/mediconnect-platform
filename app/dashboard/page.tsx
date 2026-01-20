@@ -97,7 +97,7 @@ export default function AITriageDashboard() {
           <div className="flex bg-slate-100 p-1.5 rounded-2xl gap-1">
              <button 
                 onClick={() => setSpecialty('maternal')}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase transition-all ${specialty === 'maternal' ? 'bg-white shadow-md text-blue-600' : 'text-slate-400'}`}>
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase transition-all grid grid-cols-1 lg:grid-cols-2 ${specialty === 'maternal' ? 'bg-white shadow-md text-blue-600' : 'text-slate-400'}`}>
                 <Baby size={14} /> Maternal
              </button>
              <button 
@@ -119,7 +119,7 @@ export default function AITriageDashboard() {
               </div>
               <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black shadow-lg">C</div>
             </div>
-            <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl font-black text-xs uppercase transition-all">
+            <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl font-black text-xs uppercase transition-all grid grid-cols-1 lg:grid-cols-2">
               <LogOut size={16} />
               Logout
             </button>
