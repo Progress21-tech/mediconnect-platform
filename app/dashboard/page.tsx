@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { 
-  Search, Baby, Heart, Plus, ChevronRight, Zap, 
-  Mic, HeartPulse, Pill, UserCircle, ArrowLeft, Save, Brain, Thermometer, LogOut 
+  Search, Baby, Heart, ChevronRight, Zap, 
+  HeartPulse, Pill, UserCircle, Brain, LogOut 
 } from 'lucide-react';
 
 export default function AITriageDashboard() {
@@ -81,23 +81,24 @@ export default function AITriageDashboard() {
   };
 
   return (
-    <div className="flex min-h-screen bg-white font-sans">
+    // FIX 1: Removed h-screen and overflow-hidden, used min-h-screen for scrolling
+    <div className="flex flex-col min-h-screen bg-white font-sans">
       
       {/* 1. MAIN WORKSPACE */}
-      <div className="flex-1 flex flex-col lg:flex-row">
+      <div className="flex-1 flex flex-col">
         
-        {/* TOP BAR */}
-        <header className="h-20 bg-white border-b flex items-center justify-between px-4 md:px-8 z-10 shrink-0 flex-wrap gap-4">
-          <div className="relative w-96">
-            <Search className="w-full md:w-96 absolute left-4 top-3 text-slate-300" size={18} />
+        {/* TOP BAR: Added flex-wrap and h-auto for responsiveness */}
+        <header className="min-h-[80px] h-auto py-4 bg-white border-b flex flex-wrap items-center justify-between px-4 md:px-8 z-10 shrink-0 gap-4">
+          <div className="relative w-full md:w-96 order-2 md:order-1">
+            <Search className="absolute left-4 top-3 text-slate-300" size={18} />
             <input type="text" placeholder="Search Hospital Database..." className="w-full pl-12 pr-4 py-3 bg-slate-100/50 rounded-xl border-none text-sm font-bold outline-none" />
           </div>
 
           {/* SPECIALTY SWITCHER */}
-          <div className="flex bg-slate-100 p-1.5 rounded-2xl gap-1">
+          <div className="flex bg-slate-100 p-1.5 rounded-2xl gap-1 order-1 md:order-2 mx-auto md:mx-0">
              <button 
                 onClick={() => setSpecialty('maternal')}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase transition-all grid grid-cols-1 lg:grid-cols-2 ${specialty === 'maternal' ? 'bg-white shadow-md text-blue-600' : 'text-slate-400'}`}>
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase transition-all ${specialty === 'maternal' ? 'bg-white shadow-md text-blue-600' : 'text-slate-400'}`}>
                 <Baby size={14} /> Maternal
              </button>
              <button 
@@ -107,31 +108,32 @@ export default function AITriageDashboard() {
              </button>
           </div>
 
-          <div className="flex items-center gap-6">
-            <Link href="/triage" className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 rounded-xl font-black text-xs uppercase transition-all">
+          <div className="flex items-center gap-4 md:gap-6 order-3 w-full md:w-auto justify-end">
+            <Link href="/triage" className="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 rounded-xl font-black text-xs uppercase transition-all">
               <Brain size={16} />
               AI Triage
             </Link>
-            <div className="flex items-center gap-3 border-slate-100 border-t pt-4 md: border-t-0 md:border-none md:pt-0 md:border-1 md:pl-6">
-              <div className="text-right">
+            <div className="flex items-center gap-3 border-slate-100 md:border-l md:pl-6">
+              <div className="text-right hidden sm:block">
                 <p className="text-sm font-black text-slate-800 uppercase ">Nurse Chima</p>
                 <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest">Triage Unit</p>
               </div>
               <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black shadow-lg">C</div>
             </div>
-            <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl font-black text-xs uppercase transition-all grid grid-cols-1 lg:grid-cols-2">
+            <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl font-black text-xs uppercase transition-all">
               <LogOut size={16} />
-              Logout
+              <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
         </header>
 
         {/* MAIN CONTENT AREA */}
-        <main className="w-full lg:flex-1 overflow-hidden p-8 bg-slate-50/50">
-          <div className="flex gap-8 h-full">
+        <main className="flex-1 p-4 md:p-8 bg-slate-50/50">
+          {/* FIX 2: Used flex-col (mobile) and lg:flex-row (desktop) */}
+          <div className="flex flex-col lg:flex-row gap-8 h-full">
             
-            {/* LEFT: FORM & QUEUE */}
-            <div className="w-full lg:w-96 flex flex-col gap-6 overflow-y-auto pr-2">
+            {/* LEFT: FORM & QUEUE - Width full on mobile, 96 on desktop */}
+            <div className="w-full lg:w-96 flex flex-col gap-6">
               
               {/* TRIAGE FORM CARD */}
               <div className="bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 space-y-4 shrink-0">
@@ -171,30 +173,31 @@ export default function AITriageDashboard() {
             </div>
 
             {/* RIGHT: DETAILED CLINICAL WORKSPACE */}
-            <div className="flex-1 bg-white rounded-[3.5rem] border border-slate-100 shadow-2xl flex flex-col overflow-hidden">
+            {/* FIX 3: Removed overflow-hidden to allow scrolling, added min-h */}
+            <div className="flex-1 bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-100 shadow-2xl flex flex-col min-h-[600px]">
               {selectedPatient ? (
                 <>
-                  <div className="p-8 border-b bg-slate-50/30 flex justify-between items-center">
-                     <div>
-                        <div className="flex items-center gap-3 mb-1">
-                           <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">{selectedPatient.full_name}</h2>
-                           {specialty === 'maternal' ? <Baby className="text-pink-500" /> : <Heart className="text-orange-500" />}
-                        </div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Vitals Logged: Just now</p>
-                     </div>
-                     <button className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-green-600 transition-all shadow-xl">Complete Encounter</button>
+                  <div className="p-6 md:p-8 border-b bg-slate-50/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                      <div>
+                         <div className="flex items-center gap-3 mb-1">
+                            <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">{selectedPatient.full_name}</h2>
+                            {specialty === 'maternal' ? <Baby className="text-pink-500" /> : <Heart className="text-orange-500" />}
+                         </div>
+                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Vitals Logged: Just now</p>
+                      </div>
+                      <button className="w-full md:w-auto bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-green-600 transition-all shadow-xl">Complete Encounter</button>
                   </div>
 
-                  <div className="p-10 flex-1 overflow-y-auto space-y-8">
+                  <div className="p-6 md:p-10 flex-1 space-y-8">
                     {/* AI SCRIBE MODULE */}
-                    <div className="bg-slate-900 p-10 rounded-[3rem] text-white flex items-start gap-8 relative shadow-2xl overflow-hidden group">
+                    <div className="bg-slate-900 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] text-white flex flex-col md:flex-row items-start gap-8 relative shadow-2xl overflow-hidden group">
                       <div className="bg-blue-600 p-4 rounded-2xl shadow-lg relative z-10">
                         <Zap size={32} className={isRecording ? 'animate-pulse' : ''} fill="white" />
                       </div>
                       <div className="relative z-10 flex-1">
                         <h3 className="text-[10px] font-black uppercase text-blue-400 mb-3 tracking-[0.3em]">AI Clinical Scribe</h3>
-                        <p className="text-2xl font-black leading-tight italic text-blue-50">"{selectedPatient.ai_suggestion}"</p>
-                        <div className="flex gap-4 mt-4">
+                        <p className="text-xl md:text-2xl font-black leading-tight italic text-blue-50">"{selectedPatient.ai_suggestion}"</p>
+                        <div className="flex flex-wrap gap-4 mt-4">
                            <button className="bg-blue-600 text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">Apply to Plan</button>
                            <button onClick={() => setIsRecording(!isRecording)} className="bg-white/10 text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase italic tracking-widest">
                              {isRecording ? 'Listening...' : 'Record Notes'}
@@ -205,31 +208,32 @@ export default function AITriageDashboard() {
                     </div>
 
                     {/* VITALS & PLAN GRID */}
+                    {/* FIX 4: Changed grid-cols-2 to grid-cols-1 md:grid-cols-2 */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="bg-slate-50 p-8 rounded-[3rem] border border-slate-100">
-                         <h4 className="text-[10px] font-black text-slate-400 uppercase mb-6 tracking-widest flex items-center gap-2">
-                           <HeartPulse size={16} className="text-red-500" /> Triage History
-                         </h4>
-                         <div className="space-y-4 font-black italic">
-                            <div className="flex justify-between border-b pb-2"><span>Blood Pressure</span><span className="text-xl">{selectedPatient.bp}</span></div>
-                            <div className="flex justify-between border-b pb-2"><span>Temperature</span><span className="text-xl">{selectedPatient.temp}°C</span></div>
-                         </div>
-                      </div>
-                      <div className="bg-slate-50 p-8 rounded-[3rem] border border-slate-100">
-                         <h4 className="text-[10px] font-black text-slate-400 uppercase mb-6 tracking-widest flex items-center gap-2">
-                           <Pill size={16} className="text-orange-500" /> Specialist Plan
-                         </h4>
-                         <div className="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm mb-4">
-                            <span className="font-bold text-sm uppercase italic">ANC Supplement Packet</span>
-                            <span className="text-[9px] font-black bg-blue-100 text-blue-600 px-2 py-1 rounded-lg">PHARMACY</span>
-                         </div>
-                         <button className="w-full py-4 border-2 border-dashed border-slate-200 rounded-2xl text-[10px] font-black uppercase italic text-slate-400">Add Lab Order</button>
-                      </div>
+                          <h4 className="text-[10px] font-black text-slate-400 uppercase mb-6 tracking-widest flex items-center gap-2">
+                            <HeartPulse size={16} className="text-red-500" /> Triage History
+                          </h4>
+                          <div className="space-y-4 font-black italic">
+                             <div className="flex justify-between border-b pb-2"><span>Blood Pressure</span><span className="text-xl">{selectedPatient.bp}</span></div>
+                             <div className="flex justify-between border-b pb-2"><span>Temperature</span><span className="text-xl">{selectedPatient.temp}°C</span></div>
+                          </div>
+                       </div>
+                       <div className="bg-slate-50 p-8 rounded-[3rem] border border-slate-100">
+                          <h4 className="text-[10px] font-black text-slate-400 uppercase mb-6 tracking-widest flex items-center gap-2">
+                            <Pill size={16} className="text-orange-500" /> Specialist Plan
+                          </h4>
+                          <div className="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm mb-4">
+                             <span className="font-bold text-sm uppercase italic">ANC Supplement Packet</span>
+                             <span className="text-[9px] font-black bg-blue-100 text-blue-600 px-2 py-1 rounded-lg">PHARMACY</span>
+                          </div>
+                          <button className="w-full py-4 border-2 border-dashed border-slate-200 rounded-2xl text-[10px] font-black uppercase italic text-slate-400">Add Lab Order</button>
+                       </div>
                     </div>
                   </div>
                 </>
               ) : (
-                <div className="flex-1 flex flex-col items-center justify-center opacity-10">
+                <div className="flex-1 flex flex-col items-center justify-center opacity-10 p-10 text-center">
                     <UserCircle size={120} strokeWidth={1} />
                     <p className="font-black uppercase tracking-[0.2em] mt-4">Select Patient to View Details</p>
                 </div>
