@@ -106,7 +106,7 @@ export default function AITriage() {
         {/* INPUT SECTION */}
         <div className="space-y-8">
           <div className="space-y-2">
-            <h2 className="text-5xl font-black tracking-tighter uppercase italic text-slate-900">Patient Entry</h2>
+            <h2 className="text-5xl font-black tracking-tighter uppercase text-slate-900">Patient Entry</h2>
             <p className="text-blue-500 font-bold text-xs uppercase tracking-widest">Lagos General - Clinical Stream</p>
           </div>
 
@@ -142,7 +142,7 @@ export default function AITriage() {
             <textarea 
               name="symptoms" value={formData.symptoms} onChange={handleInputChange}
               placeholder="Describe symptoms for AI analysis..." 
-              className="w-full p-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm font-bold outline-none focus:ring-2 ring-blue-500 h-48 resize-none italic"
+              className="w-full p-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm font-bold outline-none focus:ring-2 ring-blue-500 h-48 resize-none"
             />
           </div>
         </div>
@@ -156,12 +156,12 @@ export default function AITriage() {
                <button 
                  type="button" 
                  onClick={() => setSpecialty('maternal')}
-                 className={`flex-1 py-5 rounded-2xl font-black uppercase italic text-xs transition-all ${specialty === 'maternal' ? 'bg-blue-600 shadow-lg scale-105' : 'bg-white/5 text-slate-500'}`}
+                 className={`flex-1 py-5 rounded-2xl font-black uppercase text-xs transition-all ${specialty === 'maternal' ? 'bg-blue-600 shadow-lg scale-105' : 'bg-white/5 text-slate-500'}`}
                > Maternal </button>
                <button 
                  type="button" 
                  onClick={() => setSpecialty('chronic')}
-                 className={`flex-1 py-5 rounded-2xl font-black uppercase italic text-xs transition-all ${specialty === 'chronic' ? 'bg-orange-600 shadow-lg scale-105' : 'bg-white/5 text-slate-500'}`}
+                 className={`flex-1 py-5 rounded-2xl font-black uppercase text-xs transition-all ${specialty === 'chronic' ? 'bg-orange-600 shadow-lg scale-105' : 'bg-white/5 text-slate-500'}`}
                > Chronic </button>
              </div>
              <Zap className="absolute -right-8 -bottom-8 text-white opacity-5" size={180} />
@@ -177,7 +177,7 @@ export default function AITriage() {
               </span>
             </div>
 
-            <div className={`text-xl font-bold italic whitespace-pre-line ${isAnalyzing ? 'text-blue-700' : aiSuggestion ? 'text-white' : 'text-slate-300'}`}>
+            <div className={`text-xl font-bold whitespace-pre-line ${isAnalyzing ? 'text-blue-700' : aiSuggestion ? 'text-white' : 'text-slate-300'}`}>
               {isAnalyzing ? "Processing symptoms..." : aiSuggestion || "Waiting for patient data..."}
             </div>
           </div>
@@ -185,7 +185,7 @@ export default function AITriage() {
           <button 
             type="submit"
             disabled={isSaving}
-            className={`w-full py-8 rounded-[2.5rem] font-black uppercase italic tracking-widest transition-all shadow-2xl flex items-center justify-center gap-4
+            className={`w-full py-8 rounded-[2.5rem] font-black uppercase tracking-widest transition-all shadow-2xl flex items-center justify-center gap-4
               ${isSaving ? 'bg-green-500 text-white animate-pulse' : 'bg-blue-600 text-white hover:bg-slate-900 active:scale-95'}`}
           >
             {isSaving ? "Finalizing..." : "Send to Queue"}
