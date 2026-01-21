@@ -7,7 +7,10 @@ from groq import Groq
 
 # 1. INITIALIZE ENVIRONMENT
 load_dotenv()
-GROQ_API_KEY = os.getenv("=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")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+if not GROQ_API_KEY:
+    raise RuntimeError("GROQ_API_KEY not found")
 
 # 2. INITIALIZE GROQ CLIENT
 # It will use the key we loaded from .env
