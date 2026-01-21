@@ -115,7 +115,7 @@ function FeatureCard({ icon, title, desc, color }: any) {
   return (
     <div className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col items-start gap-4">
       <div className={`${colors[color]} w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center mb-4`}>{icon}</div>
-      <h3 className="font-bold text-lg sm:text-2xl mb-2 uppercase tracking-tight italic">{title}</h3>
+      <h3 className="font-bold text-lg sm:text-2xl mb-2 uppercase tracking-tight">{title}</h3>
       <p className="text-sm sm:text-base text-slate-500 leading-relaxed font-medium">{desc}</p>
     </div>
   );
