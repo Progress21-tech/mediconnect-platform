@@ -71,14 +71,14 @@ export default function LandingPage() {
             <div className="bg-pink-50/50 p-6 sm:p-8 rounded-2xl sm:rounded-[2.5rem] border border-pink-100 flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
                <div className="bg-white p-4 rounded-2xl shadow-sm mb-4 sm:mb-0"><Baby className="text-pink-500" size={32}/></div>
                <div>
-                  <h3 className="font-black text-lg sm:text-xl mb-1 sm:mb-2 text-pink-950 uppercase italic">Maternal Care</h3>
+                  <h3 className="font-black text-lg sm:text-xl mb-1 sm:mb-2 text-pink-950 uppercase">Maternal Care</h3>
                   <p className="text-sm sm:text-base text-pink-800/70 font-medium">Predictive ANC tracking & early Pre-eclampsia detection.</p>
                </div>
             </div>
             <div className="bg-orange-50/50 p-6 sm:p-8 rounded-2xl sm:rounded-[2.5rem] border border-orange-100 flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
                <div className="bg-white p-4 rounded-2xl shadow-sm mb-4 sm:mb-0"><Heart className="text-orange-500" size={32}/></div>
                <div>
-                  <h3 className="font-black text-lg sm:text-xl mb-1 sm:mb-2 text-orange-950 uppercase italic">Chronic Care</h3>
+                  <h3 className="font-black text-lg sm:text-xl mb-1 sm:mb-2 text-orange-950 uppercase">Chronic Care</h3>
                   <p className="text-sm sm:text-base text-orange-800/70 font-medium">Long-term hypertension and diabetes trend monitoring.</p>
                </div>
             </div>
