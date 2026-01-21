@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/analyze",
-      "destination": "mediconnect-backend/main.py"
+      "destination": "app/api/analyse/route.ts"
     }
   ]
 }
