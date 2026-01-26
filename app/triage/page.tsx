@@ -38,13 +38,13 @@ export default function AITriage() {
         }),
       });
 
-      if (!response.ok) throw new Error("Backend connection failed");
+      if (!response.ok) throw new Error("API route failed");
 
       const data = await response.json();
       setAiSuggestion(data.suggestion);
     } catch (err) {
       console.error(err);
-      setAiSuggestion("Connection error. Ensure your backend server is running.");
+      setAiSuggestion("AI service is currently unavailable.");
     } finally {
       setIsAnalyzing(false);
     }

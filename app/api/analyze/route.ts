@@ -1,12 +1,11 @@
 export const runtime = "nodejs";
-
-import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
 
 // Initialize Groq SDK with env variable
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY!,
 });
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
