@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
-import { LogIn } from 'lucide-react';
+import { LogIn, ArrowRight } from 'lucide-react';
 
 // This prevents Vercel from trying to pre-render this page as a static file
 export const dynamic = "force-dynamic";
@@ -43,12 +43,12 @@ export default function Login() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
       <div className="max-w-md w-full bg-white p-10 rounded-[2.5rem] shadow-xl border border-slate-100 text-center">
         <h1 className="text-3xl font-black text-slate-900 mb-2">Welcome Back</h1>
-        <p className="text-slate-500 font-bold mb-8 uppercase tracking-widest text-xs">Medical Staff Portal</p>
+        <p className="text-slate-500 font-bold mb-8 uppercase tracking-widest text-xs">Mediconnect Emr Software</p>
         
         <form onSubmit={handleLogin} className="space-y-4 text-left">
           <input 
             type="email" 
-            placeholder="Email Address"
+            placeholder="Email"
             required
             className="w-full p-4 bg-slate-50 rounded-2xl ring-1 ring-slate-100 outline-none focus:ring-2 focus:ring-blue-500 font-medium text-slate-900"
             onChange={(e) => setEmail(e.target.value)}
@@ -68,6 +68,9 @@ export default function Login() {
             {loading ? "Signing in..." : <><LogIn size={20}/> Login to EMR</>}
           </button>
         </form>
+        <p className="text-center items- center justify-center mt-6 text-slate-500 font-bold text-sm">
+          <a href="" className="text-blue-600">Go back</a><ArrowRight size={20}/>
+        </p>
       </div>
     </div>
   );
